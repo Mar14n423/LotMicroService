@@ -1,0 +1,25 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+
+# ASP.NET secrets
+appsettings.Development.json
+
+# Logs
+*.log
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Other
+*.DS_Store
