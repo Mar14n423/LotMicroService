@@ -1,12 +1,9 @@
 ﻿using FluentResults;
 using Lots.Domain.Entities;
 using Lots.Domain.Interfaces;
+using Lots.Domain.Validators;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Lots.Application.Validators
 {
@@ -19,39 +16,38 @@ namespace Lots.Application.Validators
         {
             var r = Result.Ok();
 
+            // batch_number
             if (string.IsNullOrWhiteSpace(e.batch_number))
             {
-                r = r.WithError(new Error("El número de lote es obligatorio.")
-                    .WithMetadata("FieldName", "batch_number"));
+                r = r.WithFieldError("batch_number", "El número de lote es obligatorio.");
             }
             else
             {
                 var b = e.batch_number.Trim();
-                if (b.Length is < 2 or > 30)
-                    r = r.WithError(new Error("Debe tener entre 2 y 30 caracteres.")
-                        .WithMetadata("FieldName", "batch_number"));
+
+                if (b.Length < 2 || b.Length > 30)
+                    r = r.WithFieldError("batch_number", "El número de lote debe tener entre 2 y 30 caracteres.");
 
                 if (!BatchAllowed.IsMatch(b))
-                    r = r.WithError(new Error("Solo se permiten letras, números y guiones.")
-                        .WithMetadata("FieldName", "batch_number"));
+                    r = r.WithFieldError("batch_number", "Solo se permiten letras, números y guiones.");
             }
 
+            // expiration_date
             if (e.expiration_date.Date < DateTime.Today)
             {
-                r = r.WithError(new Error("La fecha de vencimiento no puede estar en el pasado.")
-                    .WithMetadata("FieldName", "expiration_date"));
+                r = r.WithFieldError("expiration_date", "La fecha de vencimiento no puede estar en el pasado.");
             }
 
+            // quantity
             if (e.quantity < 0)
             {
-                r = r.WithError(new Error("La cantidad no puede ser negativa.")
-                    .WithMetadata("FieldName", "quantity"));
+                r = r.WithFieldError("quantity", "La cantidad no puede ser negativa.");
             }
 
+            // unit_cost
             if (e.unit_cost < 0)
             {
-                r = r.WithError(new Error("El costo unitario no puede ser negativo.")
-                    .WithMetadata("FieldName", "unit_cost"));
+                r = r.WithFieldError("unit_cost", "El costo unitario no puede ser negativo.");
             }
 
             return r;
