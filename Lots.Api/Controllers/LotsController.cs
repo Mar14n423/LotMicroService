@@ -1,12 +1,14 @@
 ﻿using Lots.Domain.Entities;
 using Lots.Domain.Exceptions;
 using Lots.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lots.Api.Controllers
 {
     [ApiController]
     [Route("api/lots")]
+    [Authorize]
     public class LotsController : ControllerBase
     {
         private readonly ILotService _service;
