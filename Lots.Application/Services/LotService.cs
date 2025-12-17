@@ -48,5 +48,14 @@ namespace Lots.Application.Services
 
         public Task DeleteLotAsync(int id)
             => _repository.DeleteAsync(id);
+
+        public async Task<List<Lot>> GetLotsByIdsAsync(List<int> ids)
+        {
+            if (ids == null || !ids.Any())
+            {
+                return new List<Lot>();
+            }
+            return await _repository.GetByIdsAsync(ids);
+        }
     }
 }

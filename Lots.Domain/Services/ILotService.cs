@@ -14,5 +14,6 @@ namespace Lots.Domain.Services
         Task<int> CreateLotAsync(Lot lot);
         Task UpdateLotAsync(Lot lot);
         Task DeleteLotAsync(int id);
+        Task<List<Lot>> GetLotsByIdsAsync(List<int> ids);
     }
 }
