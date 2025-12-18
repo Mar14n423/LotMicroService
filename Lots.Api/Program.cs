@@ -38,8 +38,8 @@ builder.Services.AddSingleton<IEventPublisher, RabbitPublisher>();
 builder.Services.AddSingleton<IIdempotencyStore, IdempotencyRepository>();
 builder.Services.AddTransient<IOutboxRepository>(sp =>
     new OutboxRepository(DatabaseConnection.Instance.GetConnection(), null));
-//builder.Services.AddHostedService<OutboxProcessor>();
-//builder.Services.AddHostedService<RabbitConsumer>();
+builder.Services.AddHostedService<OutboxProcessor>();
+builder.Services.AddHostedService<RabbitConsumer>();
 
 
 var jwtSection = builder.Configuration.GetSection("Jwt");
