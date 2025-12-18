@@ -68,15 +68,20 @@ VALUES (@id, @aggregate_id, @rk, @payload, @status, @created_at, @attempts, @err
                 {
                     list.Add(new OutboxMessage
                     {
-                        Id = rdr.GetString("id"),
-                        AggregateId = rdr.GetString("aggregate_id"),
-                        RoutingKey = rdr.GetString("routing_key"),
-                        Payload = rdr.GetString("payload"),
-                        Status = rdr.GetString("status"),
+                        Id = rdr["id"].ToString(),
+
+                        AggregateId = rdr["aggregate_id"] != DBNull.Value ? rdr["aggregate_id"].ToString() : null,
+
+                        // Estos suelen ser VARCHAR, así que GetString está bien, 
+                        // pero para estar 100% seguros puedes cambiarlos también a ["col"].ToString()
+                        RoutingKey = rdr["routing_key"].ToString(),
+                        Payload = rdr["payload"].ToString(),
+                        Status = rdr["status"].ToString(),
+
                         CreatedAt = rdr.GetDateTime("created_at"),
                         PublishedAt = rdr.IsDBNull(rdr.GetOrdinal("published_at")) ? null : rdr.GetDateTime("published_at"),
                         AttemptCount = rdr.GetInt32("attempt_count"),
-                        ErrorLog = rdr.IsDBNull(rdr.GetOrdinal("error_log")) ? null : rdr.GetString("error_log")
+                        ErrorLog = rdr.IsDBNull(rdr.GetOrdinal("error_log")) ? null : rdr["error_log"].ToString()
                     });
                 }
             }
