@@ -124,6 +124,30 @@
                 }
             }
 
+            // GET api/lots/medicine/{medId}
+            [HttpGet("medicine/{medId:int}")]
+            public async Task<IActionResult> GetByMedicine(int medId)
+            {
+                try
+                {
+                    // OPTION A: If your service has a specific method (Recommended)
+                    // var lots = await _service.GetLotsByMedicineIdAsync(medId);
+
+                    // OPTION B: Temporary workaround if you haven't created that method yet
+                    // (Fetches all and filters - active only)
+                    var allLots = await _service.GetLotsAsync();
+                    var lots = allLots.Where(l => l.medicine_id == medId && !l.is_deleted && l.quantity > 0)
+                                      .OrderBy(l => l.expiration_date) // FEFO (First Expired First Out) logic usually
+                                      .ToList();
+
+                    return Ok(lots);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500);
+                }
+            }
+
 
         }
     }
